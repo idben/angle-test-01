@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>角度學習系統 - 測試</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Microsoft JhengHei', 'PingFang TC', sans-serif;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .test-section {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .test-section h2 {
+      margin-bottom: 15px;
+      color: #555;
+      font-size: 1.2rem;
+    }
+    .test-item {
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .test-item.pass {
+      background-color: #c8e6c9;
+      color: #2e7d32;
+    }
+    .test-item.fail {
+      background-color: #ffcdd2;
+      color: #c62828;
+    }
+    .test-item.pending {
+      background-color: #fff3e0;
+      color: #e65100;
+    }
+    .status {
+      font-weight: bold;
+    }
+    .summary {
+      font-size: 1.2rem;
+      padding: 15px;
+      background: #e3f2fd;
+      border-radius: 8px;
+      text-align: center;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #2196F3;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #1976D2;
+    }
+    .manual-test {
+      margin-top: 15px;
+      padding: 15px;
+      background: #fafafa;
+      border-radius: 8px;
+      border: 1px dashed #ccc;
+    }
+    .manual-test h3 {
+      margin-bottom: 10px;
+      color: #666;
+    }
+    .manual-test ul {
+      margin-left: 20px;
+    }
+    .manual-test li {
+      margin: 5px 0;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>角度學習系統 - 自動化測試</h1>
+
+  <div id="test-results"></div>
+
+  <div class="test-section">
+    <h2>手動測試項目</h2>
+    <div class="manual-test">
+      <h3>請開啟 index.html 進行以下測試：</h3>
+      <ul>
+        <li>頁面載入時是否顯示設定目標角度的 Dialog</li>
+        <li>Dialog 是否有半透明黑色遮罩</li>
+        <li>輸入角度後按確定，Dialog 是否消失</li>
+        <li>是否有一個圓圈變成深灰色且無法拖曳</li>
+        <li>藍色圓圈是否可以拖曳，且每 10 度吸附</li>
+        <li>拖曳時角度顯示是否即時更新</li>
+        <li>按檢查答案後是否顯示結果 Dialog</li>
+        <li>答對時是否播放成功音效</li>
+        <li>答錯時是否播放失敗音效</li>
+        <li>答錯後關閉 Dialog 是否可以再試一次</li>
+        <li>答對後是否可以重新開始遊戲</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="summary" id="summary"></div>
+
+  <script>
+    // 測試結果容器
+    const resultsContainer = document.querySelector('#test-results');
+    const summaryDiv = document.querySelector('#summary');
+
+    // 測試計數
+    let passCount = 0;
+    let failCount = 0;
+
+    // 建立測試區塊
+    function createTestSection(title) {
+      const section = document.createElement('div');
+      section.className = 'test-section';
+      section.innerHTML = `<h2>${title}</h2>`;
+      resultsContainer.appendChild(section);
+      return section;
+    }
+
+    // 新增測試結果
+    function addTestResult(section, name, passed, message = '') {
+      const item = document.createElement('div');
+      item.className = `test-item ${passed ? 'pass' : 'fail'}`;
+      item.innerHTML = `
+        <span>${name}${message ? ': ' + message : ''}</span>
+        <span class="status">${passed ? 'PASS' : 'FAIL'}</span>
+      `;
+      section.appendChild(item);
+
+      if (passed) {
+        passCount++;
+      } else {
+        failCount++;
+      }
+    }
+
+    // 更新摘要
+    function updateSummary() {
+      const total = passCount + failCount;
+      summaryDiv.textContent = `測試結果：${passCount}/${total} 通過 (${Math.round(passCount/total*100)}%)`;
+    }
+
+    // 載入主程式進行測試
+    async function runTests() {
+      // 測試 1: 檔案存在性
+      const fileSection = createTestSection('1. 檔案結構測試');
+
+      try {
+        const htmlResponse = await fetch('index.html');
+        addTestResult(fileSection, 'index.html 存在', htmlResponse.ok);
+      } catch (e) {
+        addTestResult(fileSection, 'index.html 存在', false, e.message);
+      }
+
+      try {
+        const cssResponse = await fetch('style.css');
+        addTestResult(fileSection, 'style.css 存在', cssResponse.ok);
+      } catch (e) {
+        addTestResult(fileSection, 'style.css 存在', false, e.message);
+      }
+
+      try {
+        const jsResponse = await fetch('script.js');
+        addTestResult(fileSection, 'script.js 存在', jsResponse.ok);
+      } catch (e) {
+        addTestResult(fileSection, 'script.js 存在', false, e.message);
+      }
+
+      // 測試 2: HTML 結構
+      const htmlSection = createTestSection('2. HTML 結構測試');
+
+      try {
+        const htmlResponse = await fetch('index.html');
+        const htmlText = await htmlResponse.text();
+
+        addTestResult(htmlSection, '包含 SVG 半圓', htmlText.includes('<svg') && htmlText.includes('protractor'));
+        addTestResult(htmlSection, '包含開始 Dialog', htmlText.includes('start-overlay'));
+        addTestResult(htmlSection, '包含結果 Dialog', htmlText.includes('result-overlay'));
+        addTestResult(htmlSection, '包含目標角度輸入', htmlText.includes('target-angle-input'));
+        addTestResult(htmlSection, '包含檢查按鈕', htmlText.includes('check-btn'));
+        addTestResult(htmlSection, '包含兩個 handle', htmlText.includes('handle1') && htmlText.includes('handle2'));
+        addTestResult(htmlSection, '包含成功音效', htmlText.includes('success-sound'));
+        addTestResult(htmlSection, '包含失敗音效', htmlText.includes('fail-sound'));
+        addTestResult(htmlSection, '引入 style.css', htmlText.includes('style.css'));
+        addTestResult(htmlSection, '引入 script.js', htmlText.includes('script.js'));
+      } catch (e) {
+        addTestResult(htmlSection, 'HTML 解析', false, e.message);
+      }
+
+      // 測試 3: CSS 樣式
+      const cssSection = createTestSection('3. CSS 樣式測試');
+
+      try {
+        const cssResponse = await fetch('style.css');
+        const cssText = await cssResponse.text();
+
+        addTestResult(cssSection, '包含 overlay 遮罩樣式', cssText.includes('.overlay'));
+        addTestResult(cssSection, '遮罩使用半透明黑色', cssText.includes('rgba(0, 0, 0'));
+        addTestResult(cssSection, '包含 dialog 樣式', cssText.includes('.dialog'));
+        addTestResult(cssSection, '包含 handle 樣式', cssText.includes('.handle'));
+        addTestResult(cssSection, '包含固定圓圈樣式', cssText.includes('.handle.fixed'));
+        addTestResult(cssSection, '固定圓圈為深灰色', cssText.includes('#616161') || cssText.includes('616161'));
+        addTestResult(cssSection, '包含成功 dialog 樣式', cssText.includes('.dialog.success'));
+        addTestResult(cssSection, '包含失敗 dialog 樣式', cssText.includes('.dialog.fail'));
+        addTestResult(cssSection, '包含刻度樣式', cssText.includes('.tick'));
+        addTestResult(cssSection, '包含角度線樣式', cssText.includes('.angle-line'));
+      } catch (e) {
+        addTestResult(cssSection, 'CSS 解析', false, e.message);
+      }
+
+      // 測試 4: JavaScript 功能
+      const jsSection = createTestSection('4. JavaScript 功能測試');
+
+      try {
+        const jsResponse = await fetch('script.js');
+        const jsText = await jsResponse.text();
+
+        addTestResult(jsSection, '使用 querySelector', jsText.includes('querySelector'));
+        addTestResult(jsSection, '不使用 getElementById', !jsText.includes('getElementById'));
+        addTestResult(jsSection, '包含 drawTicks 函式', jsText.includes('function drawTicks'));
+        addTestResult(jsSection, '包含 angleToPosition 函式', jsText.includes('function angleToPosition'));
+        addTestResult(jsSection, '包含 positionToAngle 函式', jsText.includes('function positionToAngle'));
+        addTestResult(jsSection, '包含 startDrag 函式', jsText.includes('function startDrag'));
+        addTestResult(jsSection, '包含 onDrag 函式', jsText.includes('function onDrag'));
+        addTestResult(jsSection, '包含 endDrag 函式', jsText.includes('function endDrag'));
+        addTestResult(jsSection, '包含 checkAnswer 函式', jsText.includes('function checkAnswer'));
+        addTestResult(jsSection, '包含 startGame 函式', jsText.includes('function startGame'));
+        addTestResult(jsSection, '包含 setupHandles 函式', jsText.includes('function setupHandles'));
+        addTestResult(jsSection, '包含 showResultDialog 函式', jsText.includes('function showResultDialog'));
+        addTestResult(jsSection, '包含 playSound 函式', jsText.includes('function playSound'));
+        addTestResult(jsSection, 'SNAP_ANGLE 設為 10', jsText.includes('SNAP_ANGLE = 10'));
+        addTestResult(jsSection, '支援觸控事件', jsText.includes('touchstart') && jsText.includes('touchmove'));
+        addTestResult(jsSection, '檢查固定圓圈邏輯', jsText.includes('fixedHandle'));
+      } catch (e) {
+        addTestResult(jsSection, 'JavaScript 解析', false, e.message);
+      }
+
+      // 測試 5: 角度計算邏輯
+      const mathSection = createTestSection('5. 角度計算測試');
+
+      // 模擬角度計算
+      const CENTER_X = 200;
+      const CENTER_Y = 200;
+      const RADIUS = 180;
+      const SNAP_ANGLE = 10;
+
+      function angleToPosition(angle) {
+        const radians = (angle * Math.PI) / 180;
+        return {
+          x: CENTER_X + RADIUS * Math.cos(Math.PI - radians),
+          y: CENTER_Y - RADIUS * Math.sin(radians)
+        };
+      }
+
+      function positionToAngle(x, y) {
+        const dx = x - CENTER_X;
+        const dy = CENTER_Y - y;
+        let angle = Math.atan2(dy, -dx) * (180 / Math.PI);
+        angle = Math.max(0, Math.min(180, angle));
+        return Math.round(angle / SNAP_ANGLE) * SNAP_ANGLE;
+      }
+
+      // 測試 0 度
+      const pos0 = angleToPosition(0);
+      addTestResult(mathSection, '0 度位置計算', Math.abs(pos0.x - 380) < 1 && Math.abs(pos0.y - 200) < 1);
+
+      // 測試 90 度
+      const pos90 = angleToPosition(90);
+      addTestResult(mathSection, '90 度位置計算', Math.abs(pos90.x - 200) < 1 && Math.abs(pos90.y - 20) < 1);
+
+      // 測試 180 度
+      const pos180 = angleToPosition(180);
+      addTestResult(mathSection, '180 度位置計算', Math.abs(pos180.x - 20) < 1 && Math.abs(pos180.y - 200) < 1);
+
+      // 測試位置轉角度
+      addTestResult(mathSection, '位置轉 0 度', positionToAngle(380, 200) === 0);
+      addTestResult(mathSection, '位置轉 90 度', positionToAngle(200, 20) === 90);
+      addTestResult(mathSection, '位置轉 180 度', positionToAngle(20, 200) === 180);
+
+      // 測試吸附
+      addTestResult(mathSection, '角度吸附 (13 度 → 10 度)', positionToAngle(200 + 180 * Math.cos(Math.PI - 13 * Math.PI / 180), 200 - 180 * Math.sin(13 * Math.PI / 180)) === 10);
+
+      // 測試角度差計算
+      const angle1 = 30, angle2 = 150;
+      const diff = Math.abs(angle1 - angle2);
+      addTestResult(mathSection, '角度差計算 (30°, 150° = 120°)', diff === 120);
+
+      // 更新摘要
+      updateSummary();
+    }
+
+    // 執行測試
+    runTests();
+  </script>
+</body>
+</html>

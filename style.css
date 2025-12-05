@@ -90,6 +90,17 @@ h1 {
   fill: #1565C0;
 }
 
+/* 固定圓圈（深灰色） */
+.handle.fixed {
+  fill: #616161;
+  stroke: #424242;
+  cursor: default;
+}
+
+.handle.fixed:hover {
+  fill: #616161;
+}
+
 /* 角度顯示區域 */
 .angle-display {
   font-size: 1.4rem;
@@ -173,4 +184,131 @@ h1 {
 .result.incorrect {
   background-color: #ffcdd2;
   color: #c62828;
+}
+
+/* 遮罩層 */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+/* Dialog */
+.dialog {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+}
+
+.dialog h2 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.dialog p {
+  color: #555;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+.dialog-content {
+  margin-bottom: 20px;
+}
+
+.dialog-content label {
+  display: block;
+  margin-bottom: 10px;
+  color: #555;
+  font-size: 1rem;
+}
+
+.dialog-content input {
+  width: 100px;
+  padding: 10px 15px;
+  font-size: 1.2rem;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  text-align: center;
+  transition: border-color 0.3s;
+}
+
+.dialog-content input:focus {
+  outline: none;
+  border-color: #2196F3;
+}
+
+.dialog-btn {
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  background-color: #2196F3;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.dialog-btn:hover {
+  background-color: #1976D2;
+}
+
+.dialog-btn:active {
+  background-color: #1565C0;
+}
+
+/* 成功 Dialog */
+.dialog.success h2 {
+  color: #2e7d32;
+}
+
+.dialog.success .dialog-btn {
+  background-color: #4CAF50;
+}
+
+.dialog.success .dialog-btn:hover {
+  background-color: #388E3C;
+}
+
+/* 失敗 Dialog */
+.dialog.fail h2 {
+  color: #c62828;
+}
+
+.dialog.fail .dialog-btn {
+  background-color: #f44336;
+}
+
+.dialog.fail .dialog-btn:hover {
+  background-color: #d32f2f;
+}
+
+/* 目標角度顯示 */
+.target-display {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 15px;
+  padding: 8px;
+  background-color: #fff3e0;
+  border-radius: 8px;
+}
+
+#target-angle {
+  font-weight: bold;
+  color: #e65100;
 }

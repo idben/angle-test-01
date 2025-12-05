@@ -7,8 +7,42 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- 開始 Dialog：輸入目標角度 -->
+  <div id="start-overlay" class="overlay">
+    <div class="dialog">
+      <h2>設定目標角度</h2>
+      <div class="dialog-content">
+        <label for="target-angle-input">請輸入目標角度 (0～180)：</label>
+        <input type="number" id="target-angle-input" min="0" max="180" value="90">
+      </div>
+      <button id="start-btn" class="dialog-btn">確定</button>
+    </div>
+  </div>
+
+  <!-- 結果 Dialog -->
+  <div id="result-overlay" class="overlay hidden">
+    <div class="dialog">
+      <h2 id="result-title">結果</h2>
+      <p id="result-message"></p>
+      <button id="result-btn" class="dialog-btn">確定</button>
+    </div>
+  </div>
+
+  <!-- 音效 -->
+  <audio id="success-sound" preload="auto">
+    <source src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="fail-sound" preload="auto">
+    <source src="https://assets.mixkit.co/active_storage/sfx/2020/2020-preview.mp3" type="audio/mpeg">
+  </audio>
+
   <div class="container">
     <h1>角度學習系統</h1>
+
+    <!-- 目標角度顯示 -->
+    <div class="target-display">
+      目標角度：<span id="target-angle">90</span> 度
+    </div>
 
     <!-- 半圓顯示區域 -->
     <div class="protractor-container">
@@ -37,15 +71,10 @@
       目前角度：<span id="current-angle">180</span> 度
     </div>
 
-    <!-- 輸入與檢查區域 -->
+    <!-- 檢查按鈕 -->
     <div class="input-section">
-      <label for="angle-input">請輸入角度 (0～180)：</label>
-      <input type="number" id="angle-input" min="0" max="180" value="0">
       <button id="check-btn">檢查答案</button>
     </div>
-
-    <!-- 結果回饋區域 -->
-    <div id="result" class="result"></div>
   </div>
 
   <script src="script.js"></script>
