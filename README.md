@@ -36,7 +36,7 @@
 
 ## 線上預覽
 
-可透過 GitHub Pages 直接開啟使用。
+👉 https://idben.github.io/angle-test-01/
 
 ## 授權
 
