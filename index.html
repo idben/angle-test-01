@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>角度學習系統</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>角度學習系統</h1>
+
+    <!-- 半圓顯示區域 -->
+    <div class="protractor-container">
+      <svg id="protractor" viewBox="0 0 400 220">
+        <!-- 半圓弧線 -->
+        <path id="arc" class="arc" d="M 20,200 A 180,180 0 0,1 380,200" />
+
+        <!-- 刻度群組 -->
+        <g id="ticks"></g>
+
+        <!-- 角度線 -->
+        <line id="line1" class="angle-line" x1="200" y1="200" x2="20" y2="200" />
+        <line id="line2" class="angle-line" x1="200" y1="200" x2="380" y2="200" />
+
+        <!-- 圓心 -->
+        <circle class="center" cx="200" cy="200" r="5" />
+
+        <!-- 可拖曳圓圈 -->
+        <circle id="handle1" class="handle" cx="20" cy="200" r="12" data-angle="180" />
+        <circle id="handle2" class="handle" cx="380" cy="200" r="12" data-angle="0" />
+      </svg>
+    </div>
+
+    <!-- 角度顯示區域 -->
+    <div class="angle-display">
+      目前角度：<span id="current-angle">180</span> 度
+    </div>
+
+    <!-- 輸入與檢查區域 -->
+    <div class="input-section">
+      <label for="angle-input">請輸入角度 (0～180)：</label>
+      <input type="number" id="angle-input" min="0" max="180" value="0">
+      <button id="check-btn">檢查答案</button>
+    </div>
+
+    <!-- 結果回饋區域 -->
+    <div id="result" class="result"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
